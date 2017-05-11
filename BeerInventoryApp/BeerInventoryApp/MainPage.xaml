@@ -4,8 +4,33 @@
              xmlns:local="clr-namespace:BeerInventoryApp"
              x:Class="BeerInventoryApp.MainPage">
 
-	<Label Text="Welcome to Xamarin Forms!" 
-           VerticalOptions="Center" 
-           HorizontalOptions="Center" />
+    <StackLayout Margin="20">
+        <Label Text="Welcome to Xamarin Forms!" 
+               VerticalOptions="Center" 
+               HorizontalOptions="Center" />
+
+        <ListView x:Name="listView" ItemSelected="OnListViewItemSelected">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <StackLayout Orientation="Horizontal" VerticalOptions="FillAndExpand" MinimumHeightRequest="200" >
+                            <Image Source="{Binding LabelUrl}" WidthRequest="100" HeightRequest="200"/>
+                            <StackLayout Margin="20" Orientation="Vertical" HorizontalOptions="StartAndExpand">
+                                <Label Text="{Binding Brewer}" FontAttributes="Bold" />
+                                <Label Text="{Binding Name}"  />
+                                <Label Text="{Binding ABV, StringFormat='{0:F0}%'}" />
+                            </StackLayout>
+                            <StackLayout Orientation="Horizontal" VerticalOptions="Center" HorizontalOptions="End">
+                                <Label Text="{Binding Location}" />
+                                <Label Text="{Binding Count}"  />
+                            </StackLayout>
+                        </StackLayout>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+
+        <Editor x:Name="editor" HeightRequest="100" IsEnabled="false" />
+    </StackLayout>
 
 </ContentPage>
