@@ -1,4 +1,5 @@
 ﻿using BeerInventory.Models;
+using BeerInventoryApp.Data;
 using BeerInventoryApp.Services;
 using System;
 using System.Collections.Generic;
@@ -12,7 +13,7 @@ namespace BeerInventoryApp
 {
 	public partial class MainPage : ContentPage
 	{
-        ObservableCollection<InventoryDetails> Items { get; set; } = new ObservableCollection<InventoryDetails>();
+        ObservableCollection<Grouping<InventoryDetails, InventoryDetails>> Items { get; set; } = new ObservableCollection<Grouping<InventoryDetails, InventoryDetails>>();
 
         InventoryService InventoryService { get; set; } = new InventoryService();
 
@@ -30,7 +31,7 @@ namespace BeerInventoryApp
 
         void OnListViewItemSelected(object sender, SelectedItemChangedEventArgs e)
         {
-            var name = e.SelectedItem.ToString();
+            var name = ((InventoryDetails)e.SelectedItem).ToString();
 
             editor.Text = name;
         }
@@ -46,6 +47,11 @@ namespace BeerInventoryApp
             UpdateItems();
         }
 
+        private void Scan_Button_Clicked(object sender, EventArgs e)
+        {
+            
+        }
+
         private void Entry_Completed(object sender, EventArgs e)
         {
             name = ((Entry)sender).Text;
@@ -59,14 +65,11 @@ namespace BeerInventoryApp
 
             var inventory = InventoryService.GetInventory(name);
 
-            var newList = new ObservableCollection<InventoryDetails>();
+            var sorted = inventory
+                .GroupBy(x => x.Id)
+                .Select(x => new Grouping<InventoryDetails, InventoryDetails>(x.First(), x));
 
-            foreach (var beer in inventory)
-            {
-                newList.Add(beer);
-            }
-
-            Items = newList;
+            Items = new ObservableCollection<Grouping<InventoryDetails, InventoryDetails>>(sorted);
 
             listView.ItemsSource = Items;
             lastResultCount = Items.Count();
@@ -93,7 +96,10 @@ namespace BeerInventoryApp
                 listView.ItemsSource = Items;
             }
 
-            var results = new ObservableCollection<InventoryDetails>(Items.Where(x => x.Name.ToLower().Contains(searchTerm) || searchTerm.ToLower().Contains(x.Name)).ToList());
+            var results = new ObservableCollection<Grouping<InventoryDetails, InventoryDetails>>(
+                Items.Where(x => x.Key.Name.ToLower().Contains(searchTerm) ||
+                searchTerm.ToLower().Contains(x.Key.Name)
+                ).ToList());
 
             // TODO: Probably hacky, should rework
             if (results.Count != lastResultCount)

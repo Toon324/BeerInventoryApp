@@ -16,6 +16,7 @@ Global
 		BeerInventoryApp\BeerInventoryApp\BeerInventoryApp.projitems*{66194101-cea1-46e7-ba4e-fd416e9c558c}*SharedItemsImports = 4
 		BeerInventoryApp\BeerInventoryApp\BeerInventoryApp.projitems*{76b6132f-b2bd-4edc-8963-118c9d4c37a2}*SharedItemsImports = 4
 		BeerInventoryApp\BeerInventoryApp\BeerInventoryApp.projitems*{9f30ae26-651d-4e05-98cd-dc5aa5643ef0}*SharedItemsImports = 13
+		BeerInventoryApp\BeerInventoryApp\BeerInventoryApp.projitems*{b392fba2-0198-4ff3-a22a-2ef3d5e13df7}*SharedItemsImports = 4
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Ad-Hoc|Any CPU = Ad-Hoc|Any CPU
