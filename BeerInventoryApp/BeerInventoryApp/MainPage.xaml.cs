@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Xamarin.Forms;
+using ZXing.Net.Mobile.Forms;
 
 namespace BeerInventoryApp
 {
@@ -47,9 +48,35 @@ namespace BeerInventoryApp
             UpdateItems();
         }
 
-        private void Scan_Button_Clicked(object sender, EventArgs e)
+        private async void Scan_Button_Clicked(object sender, EventArgs e)
         {
-            
+            /*
+            var barcodeScanner = new ZXingScannerPage();
+            await Navigation.PushModalAsync(barcodeScanner);
+
+            barcodeScanner.OnScanResult += (result) =>
+            {
+                barcodeScanner.IsScanning = false;
+
+                Device.BeginInvokeOnMainThread(async () =>
+                {
+                    await Navigation.PopModalAsync();
+                    await Navigation.PushModalAsync(new AddToDb(result.Text));
+                });
+            };
+            */
+
+            var scannerPage = new CustomScannerPage();
+            await Navigation.PushModalAsync(scannerPage);
+
+            scannerPage.OnUpcResult += (result) =>
+            {
+                Device.BeginInvokeOnMainThread(async () =>
+                {
+                    //await Navigation.PopModalAsync();
+                    await Navigation.PushModalAsync(new AddToDb(result));
+                });
+            };
         }
 
         private void Entry_Completed(object sender, EventArgs e)

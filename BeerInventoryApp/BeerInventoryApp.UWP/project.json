@@ -2,10 +2,10 @@
   "dependencies": {
     "Microsoft.NETCore.UniversalWindowsPlatform": "5.2.2",
     "PortableRest": "3.0.1",
-    "Xamarin.Forms": "2.3.4.224",
-    "Xamarin.Forms.Pages.Azure": "2.3.4.231",
-    "Xamarin.Forms.Theme.Base": "1.0.0.43-pre1",
-    "Xamarin.Forms.Theme.Light": "1.0.0.43-pre1"
+    "Xamarin.Forms": "2.3.4.231",
+    "Xamarin.Forms.Theme.Light": "1.0.0.43-pre1",
+    "ZXing.Net.Mobile": "2.2.9",
+    "ZXing.Net.Mobile.Forms": "2.2.9"
   },
   "frameworks": {
     "uap10.0": {}
