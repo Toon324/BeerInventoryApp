@@ -45,21 +45,27 @@ namespace BeerInventoryApp
             grid.Children.Add(zxing);
             grid.Children.Add(overlay);
 
-            var endButton = new Button { Text = "Enter", HorizontalOptions = LayoutOptions.End };
-            endButton.Clicked += (sender, e) =>
-            Device.BeginInvokeOnMainThread(() =>
-            {
-                zxing.IsAnalyzing = false;
-                OnUpcResultEvent(((Button)sender).Text);
-            });
-
             var upcEntry = new Entry { Placeholder = "UPC", HorizontalOptions = LayoutOptions.FillAndExpand };
             upcEntry.Completed += (sender, e) =>
             Device.BeginInvokeOnMainThread(() =>
             {
                 zxing.IsAnalyzing = false;
+                zxing.IsScanning = false;
+                zxing.IsEnabled = false;
                 OnUpcResultEvent(((Entry)sender).Text);
             });
+
+            var endButton = new Button { Text = "Enter", HorizontalOptions = LayoutOptions.End };
+            endButton.Clicked += (sender, e) =>
+            Device.BeginInvokeOnMainThread(() =>
+            {
+                zxing.IsAnalyzing = false;
+                zxing.IsScanning = false;
+                zxing.IsEnabled = false;
+                OnUpcResultEvent(upcEntry.Text);
+            });
+
+            
 
             var content = new StackLayout
             {
@@ -93,6 +99,21 @@ namespace BeerInventoryApp
         protected void OnUpcResultEvent(String text)
         {
             OnUpcResult(text);
+        }
+
+
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+
+            zxing.IsScanning = true;
+        }
+
+        protected override void OnDisappearing()
+        {
+            zxing.IsScanning = false;
+
+            base.OnDisappearing();
         }
     }
 }

@@ -73,7 +73,7 @@ namespace BeerInventoryApp
             {
                 Device.BeginInvokeOnMainThread(async () =>
                 {
-                    //await Navigation.PopModalAsync();
+                    await Navigation.PopModalAsync();
                     await Navigation.PushModalAsync(new AddToDb(result));
                 });
             };
