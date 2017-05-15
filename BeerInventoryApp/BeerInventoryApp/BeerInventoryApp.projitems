@@ -9,8 +9,9 @@
     <Import_RootNamespace>BeerInventoryApp</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="$(MSBuildThisFileDirectory)Modals\CustomScannerPage.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Modals\AddToDb.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ModalPages\BeerDetails.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ModalPages\CustomScannerPage.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ModalPages\AddToDbPage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
@@ -34,8 +35,5 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="$(MSBuildThisFileDirectory)Modals\" />
   </ItemGroup>
 </Project>

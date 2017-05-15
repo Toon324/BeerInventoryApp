@@ -20,14 +20,16 @@
                   ItemSelected="OnListViewItemSelected"
                   IsGroupingEnabled="True"
                   GroupDisplayBinding="{Binding Key}"
-                  GroupShortNameBinding="{Binding Key}">
+                  GroupShortNameBinding="{Binding Key}"
+                  HasUnevenRows="true"
+                  >
 
             <ListView.GroupHeaderTemplate>
                 <DataTemplate>
-                    <ViewCell Height="25">
-                        <StackLayout Orientation="Horizontal" VerticalOptions="FillAndExpand" >
+                    <ViewCell>
+                        <StackLayout Orientation="Horizontal" VerticalOptions="FillAndExpand">
                             <Image Source="{Binding Key.LabelUrl}" WidthRequest="100" HeightRequest="100"/>
-                            <StackLayout Margin="20" Orientation="Vertical" HorizontalOptions="StartAndExpand">
+                            <StackLayout Margin="20, 0, 0, 0" Orientation="Vertical" HorizontalOptions="StartAndExpand" VerticalOptions="Center">
                                 <Label Text="{Binding Key.Brewer}" FontAttributes="Bold" />
                                 <Label Text="{Binding Key.Name}"  />
                                 <Label Text="{Binding Key.ABV, StringFormat='{0:F0}%'}" />
@@ -40,11 +42,10 @@
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <ViewCell>
-                            <Label Text="Test" />
-                            <StackLayout Margin="20, 0, 20, 0" Orientation="Horizontal" VerticalOptions="Center">
-                                <Label Text="{Binding Location}" />
-                                <Label Text=": " />
-                                <Label Text="{Binding Count}"  />
+                        <StackLayout Margin="5" Orientation="Horizontal" VerticalOptions="Center" >
+                                <Label Text="{Binding Location}" FontSize="20" />
+                                <Label Text=": " FontSize="20" />
+                                <Label Text="{Binding Count}" FontSize="20" />
                             </StackLayout>
                         </ViewCell>
                 </DataTemplate>

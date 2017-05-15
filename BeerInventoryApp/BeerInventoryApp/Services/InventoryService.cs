@@ -22,5 +22,26 @@ namespace BeerInventoryApp.Services
 
             return client.Execute<List<InventoryDetails>>(request);
         }
+
+        public List<BeerEntity> GetBeerDetails(String upc)
+        {
+            var client = new GenericRestClient(ApiUrl);
+
+            var request = new GenericRestRequest("/beer/" + upc);
+
+            return client.Execute<List<BeerEntity>>(request);
+        }
+
+        public BeerEntity GetBeerDetailsByName(String brewery, String beerName)
+        {
+            var client = new GenericRestClient(ApiUrl);
+
+            var request = new GenericRestRequest("/beer");
+
+            request.AddQueryParameter("brewery", brewery);
+            request.AddQueryParameter("beerName", beerName);
+
+            return client.Execute<BeerEntity>(request);
+        }
     }
 }

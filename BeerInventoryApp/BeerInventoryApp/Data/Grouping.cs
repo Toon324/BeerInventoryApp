@@ -11,6 +11,11 @@ namespace BeerInventoryApp.Data
     {
         public K Key { get; private set; }
 
+        public IEnumerable<T> GetItems()
+        {
+            return Items;
+        }
+
         public Grouping(K key, IEnumerable<T> items)
         {
             Key = key;

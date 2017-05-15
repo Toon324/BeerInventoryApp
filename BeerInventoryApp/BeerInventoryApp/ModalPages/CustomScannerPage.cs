@@ -65,7 +65,20 @@ namespace BeerInventoryApp
                 OnUpcResultEvent(upcEntry.Text);
             });
 
-            
+
+            var brewerEntry = new Entry { Placeholder = "Brewery Name", HorizontalOptions = LayoutOptions.FillAndExpand };
+            var beerEntry = new Entry { Placeholder = "Beer Name", HorizontalOptions = LayoutOptions.FillAndExpand };
+
+            var manualEndButton = new Button { Text = "Enter", HorizontalOptions = LayoutOptions.End };
+            manualEndButton.Clicked += (sender, e) =>
+            Device.BeginInvokeOnMainThread(() =>
+            {
+                zxing.IsAnalyzing = false;
+                zxing.IsScanning = false;
+                zxing.IsEnabled = false;
+                OnManualResultEvent(upcEntry.Text);
+            });
+
 
             var content = new StackLayout
             {
@@ -73,15 +86,33 @@ namespace BeerInventoryApp
                     grid,
                     new StackLayout
                     {
-                        Margin = 20,
+                        Margin = new Thickness(20, 20, 20, 5),
                         Children =
                         {
-                            new Label { Text = "Or, manually enter your UPC" },
+                            new Label { Text = "Or, manually enter your UPC", FontSize = 20 },
                             new StackLayout {
                                 Orientation = StackOrientation.Horizontal,
                                 Children = {
                                     upcEntry,
                                     endButton
+                                }
+                            }
+                        }
+                    },
+                    new StackLayout
+                    {
+                        Margin = new Thickness(20, 0, 20, 20),
+                        Children =
+                        {
+                            new Label { Text = "Or even just lookup manually by name!", FontSize = 20 },
+                            new StackLayout
+                            {
+                                Orientation = StackOrientation.Horizontal,
+                                Children =
+                                {
+                                    brewerEntry,
+                                    beerEntry,
+                                    manualEndButton
                                 }
                             }
                         }
@@ -99,6 +130,15 @@ namespace BeerInventoryApp
         protected void OnUpcResultEvent(String text)
         {
             OnUpcResult(text);
+        }
+
+        public event ManualResultDelegate OnManualResult;
+        
+        public delegate void ManualResultDelegate(String upc);
+
+        protected void OnManualResultEvent(String text)
+        {
+            OnManualResult(text);
         }
 
 

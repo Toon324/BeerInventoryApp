@@ -1,5 +1,6 @@
 ﻿using BeerInventory.Models;
 using BeerInventoryApp.Data;
+using BeerInventoryApp.ModalPages;
 using BeerInventoryApp.Services;
 using System;
 using System.Collections.Generic;
@@ -30,11 +31,13 @@ namespace BeerInventoryApp
         }
 
 
-        void OnListViewItemSelected(object sender, SelectedItemChangedEventArgs e)
+        async void OnListViewItemSelected(object sender, SelectedItemChangedEventArgs e)
         {
-            var name = ((InventoryDetails)e.SelectedItem).ToString();
+            var item = ((InventoryDetails)e.SelectedItem);
 
-            editor.Text = name;
+            var details = Items.First(x => x.Key.Id == item.Id).GetItems();
+
+            await Navigation.PushModalAsync(new BeerDetails(details));
         }
 
         private void Entry_TextChanged(object sender, TextChangedEventArgs e)
@@ -50,22 +53,6 @@ namespace BeerInventoryApp
 
         private async void Scan_Button_Clicked(object sender, EventArgs e)
         {
-            /*
-            var barcodeScanner = new ZXingScannerPage();
-            await Navigation.PushModalAsync(barcodeScanner);
-
-            barcodeScanner.OnScanResult += (result) =>
-            {
-                barcodeScanner.IsScanning = false;
-
-                Device.BeginInvokeOnMainThread(async () =>
-                {
-                    await Navigation.PopModalAsync();
-                    await Navigation.PushModalAsync(new AddToDb(result.Text));
-                });
-            };
-            */
-
             var scannerPage = new CustomScannerPage();
             await Navigation.PushModalAsync(scannerPage);
 
