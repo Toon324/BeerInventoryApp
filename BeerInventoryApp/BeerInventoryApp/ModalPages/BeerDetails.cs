@@ -1,11 +1,13 @@
 ﻿using BeerInventory.Models;
+using BeerInventoryApp.Data;
 using BeerInventoryApp.Services;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
-
+using System.Threading;
 using Xamarin.Forms;
 
 namespace BeerInventoryApp.ModalPages
@@ -18,14 +20,15 @@ namespace BeerInventoryApp.ModalPages
         string BeerId { get; set; }
         bool shouldAdd = true;
         Button submitButton;
-        IEnumerable<InventoryDetails> Details { get; set; }
+        ObservableCollection<InventoryDetails> Details { get; set; } = new ObservableCollection<InventoryDetails>();
+        StackLayout DetailList { get; set; }
 
         public BeerDetails(IEnumerable<InventoryDetails> details, String owner, String beerId)
         {
             BeerId = beerId;
             Owner = owner;
 
-            Details = details;
+            Details = new ObservableCollection<InventoryDetails>(details);
 
             var beer = details.First();
 
@@ -38,32 +41,8 @@ namespace BeerInventoryApp.ModalPages
                 HorizontalOptions = LayoutOptions.Center
             };
 
-            foreach (var inventory in details)
-            {
-                inventoryDetails.Children.Add(new Frame()
-                {
-                    Content = new StackLayout()
-                    {
-                        Orientation = StackOrientation.Vertical,
-                        Children =
-                        {
-                            new Label() {
-                                Text = inventory.Location,
-                                FontAttributes = FontAttributes.Bold,
-                                FontSize = 20,
-                                HorizontalOptions = LayoutOptions.Center
-                            },
-                            new Label()
-                            {
-                                Text = inventory.Count.ToString(),
-                                FontAttributes = FontAttributes.Bold,
-                                HorizontalOptions = LayoutOptions.Center,
-                                VerticalOptions = LayoutOptions.Center
-                            }
-                        }
-                    }
-                });
-            }
+            DetailList = inventoryDetails;
+            UpdateList();
 
             var addRemoveSwitch = new Xamarin.Forms.Switch
             {
@@ -222,8 +201,18 @@ namespace BeerInventoryApp.ModalPages
 
         private void SubmitButton_Clicked(object sender, EventArgs e)
         {
-            Debug.WriteLine("Adding " + Owner + " " + location + " " + BeerId + " " + count);
-            InventoryService.AddToInventory(Owner, location, BeerId, count);
+            var amt = count;
+
+            if (!shouldAdd)
+            {
+                amt = amt * -1;
+            }
+
+            Debug.WriteLine("Adding " + Owner + " " + location + " " + BeerId + " " + amt);
+
+            InventoryService.AddToInventory(Owner, location, BeerId, amt);
+
+            Reload();
         }
 
         private void LocationPicker_SelectedIndexChanged(object sender, EventArgs e)
@@ -270,6 +259,54 @@ namespace BeerInventoryApp.ModalPages
                 {
                     submitButton.Text = "Remove " + count + " from " + location;
                 }
+            }
+        }
+
+        private void Reload()
+        {
+            var inventory = InventoryService.GetInventory(Owner);
+            inventory = InventoryService.GetInventory(Owner);
+
+            var sorted = inventory
+                .GroupBy(x => x.Id)
+                .Select(x => new Grouping<InventoryDetails, InventoryDetails>(x.First(), x));
+
+            var details = sorted.First(x => x.Key.Id == BeerId).GetItems();
+
+            Details = new ObservableCollection<InventoryDetails>(details);
+            UpdateList();
+            UpdateButton();
+        }
+
+        private void UpdateList()
+        {
+            DetailList.Children.Clear();
+
+            foreach (var inventory in Details)
+            {
+                DetailList.Children.Add(new Frame()
+                {
+                    Content = new StackLayout()
+                    {
+                        Orientation = StackOrientation.Vertical,
+                        Children =
+                        {
+                            new Label() {
+                                Text = inventory.Location,
+                                FontAttributes = FontAttributes.Bold,
+                                FontSize = 20,
+                                HorizontalOptions = LayoutOptions.Center
+                            },
+                            new Label()
+                            {
+                                Text = inventory.Count.ToString(),
+                                FontAttributes = FontAttributes.Bold,
+                                HorizontalOptions = LayoutOptions.Center,
+                                VerticalOptions = LayoutOptions.Center
+                            }
+                        }
+                    }
+                });
             }
         }
     }

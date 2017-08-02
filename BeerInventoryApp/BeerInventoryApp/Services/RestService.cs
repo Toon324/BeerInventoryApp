@@ -56,7 +56,6 @@ namespace BeerInventoryApp.Services
         }
     }
 
-
     public class GenericRestRequest
     {
         public RestRequest request { get; set; }
