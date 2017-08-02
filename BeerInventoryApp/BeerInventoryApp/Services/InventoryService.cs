@@ -9,7 +9,7 @@ namespace BeerInventoryApp.Services
     {
         private static string ApiUrl = "http://beerinventory20170506104048.azurewebsites.net/api";
 
-        public List<InventoryDetails> GetInventory(string owner, string location = "")
+        public static List<InventoryDetails> GetInventory(string owner, string location = "")
         {
             var client = new GenericRestClient(ApiUrl);
 
@@ -23,7 +23,7 @@ namespace BeerInventoryApp.Services
             return client.Execute<List<InventoryDetails>>(request);
         }
 
-        public List<BeerEntity> GetBeerDetails(String upc)
+        public static List<BeerEntity> GetBeerDetails(String upc)
         {
             var client = new GenericRestClient(ApiUrl);
 
@@ -32,7 +32,7 @@ namespace BeerInventoryApp.Services
             return client.Execute<List<BeerEntity>>(request);
         }
 
-        public BeerEntity GetBeerDetailsByName(String brewery, String beerName)
+        public static BeerEntity GetBeerDetailsByName(String brewery, String beerName)
         {
             var client = new GenericRestClient(ApiUrl);
 
@@ -42,6 +42,21 @@ namespace BeerInventoryApp.Services
             request.AddQueryParameter("beerName", beerName);
 
             return client.Execute<BeerEntity>(request);
+        }
+
+        public static void AddToInventory(string owner, string location, string beerId, int count)
+        {
+            var client = new GenericRestClient(ApiUrl);
+
+            var request = new GenericRestRequest("/inventory");
+
+            request.AddQueryParameter("id", beerId);
+            request.AddQueryParameter("user", owner);
+            request.AddQueryParameter("location", location);
+            request.AddQueryParameter("count", count.ToString());
+
+            client.Post(request);
+
         }
     }
 }

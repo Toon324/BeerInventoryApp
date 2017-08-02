@@ -17,8 +17,6 @@ namespace BeerInventoryApp
 	{
         ObservableCollection<Grouping<InventoryDetails, InventoryDetails>> Items { get; set; } = new ObservableCollection<Grouping<InventoryDetails, InventoryDetails>>();
 
-        InventoryService InventoryService { get; set; } = new InventoryService();
-
         private String name = "Cody";
 
         private int lastResultCount = 0;
@@ -37,7 +35,7 @@ namespace BeerInventoryApp
 
             var details = Items.First(x => x.Key.Id == item.Id).GetItems();
 
-            await Navigation.PushModalAsync(new BeerDetails(details));
+            await Navigation.PushModalAsync(new BeerDetails(details, name, item.Id));
         }
 
         private void Entry_TextChanged(object sender, TextChangedEventArgs e)

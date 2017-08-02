@@ -1,6 +1,8 @@
 ﻿using BeerInventory.Models;
+using BeerInventoryApp.Services;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 
@@ -12,12 +14,17 @@ namespace BeerInventoryApp.ModalPages
     {
         int count = 1;
         string location = "None";
+        string Owner { get; set; }
+        string BeerId { get; set; }
         bool shouldAdd = true;
         Button submitButton;
         IEnumerable<InventoryDetails> Details { get; set; }
 
-        public BeerDetails(IEnumerable<InventoryDetails> details)
+        public BeerDetails(IEnumerable<InventoryDetails> details, String owner, String beerId)
         {
+            BeerId = beerId;
+            Owner = owner;
+
             Details = details;
 
             var beer = details.First();
@@ -58,7 +65,7 @@ namespace BeerInventoryApp.ModalPages
                 });
             }
 
-            var addRemoveSwitch = new Switch
+            var addRemoveSwitch = new Xamarin.Forms.Switch
             {
                 IsToggled = true
             };
@@ -215,7 +222,8 @@ namespace BeerInventoryApp.ModalPages
 
         private void SubmitButton_Clicked(object sender, EventArgs e)
         {
-            //throw new NotImplementedException();
+            Debug.WriteLine("Adding " + Owner + " " + location + " " + BeerId + " " + count);
+            InventoryService.AddToInventory(Owner, location, BeerId, count);
         }
 
         private void LocationPicker_SelectedIndexChanged(object sender, EventArgs e)
@@ -260,7 +268,7 @@ namespace BeerInventoryApp.ModalPages
                 }
                 else
                 {
-                    submitButton.Text = "Remove " + count + " to " + location;
+                    submitButton.Text = "Remove " + count + " from " + location;
                 }
             }
         }
