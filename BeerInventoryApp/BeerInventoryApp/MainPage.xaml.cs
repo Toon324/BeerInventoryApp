@@ -35,7 +35,7 @@ namespace BeerInventoryApp
 
             var details = Items.First(x => x.Key.Id == item.Id).GetItems();
 
-            await Navigation.PushModalAsync(new BeerDetails(details, name, item.Id));
+            await Navigation.PushAsync(new BeerDetails(details, name, item.Id));
         }
 
         private void Entry_TextChanged(object sender, TextChangedEventArgs e)
@@ -52,14 +52,13 @@ namespace BeerInventoryApp
         private async void Scan_Button_Clicked(object sender, EventArgs e)
         {
             var scannerPage = new CustomScannerPage();
-            await Navigation.PushModalAsync(scannerPage);
+            await Navigation.PushAsync(scannerPage);
 
             scannerPage.OnUpcResult += (result) =>
             {
                 Device.BeginInvokeOnMainThread(async () =>
                 {
-                    await Navigation.PopModalAsync();
-                    await Navigation.PushModalAsync(new AddToDb(result));
+                    await Navigation.PushAsync(new AddToDb(result));
                 });
             };
         }

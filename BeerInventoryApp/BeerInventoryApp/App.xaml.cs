@@ -13,7 +13,7 @@ namespace BeerInventoryApp
 		{
 			InitializeComponent();
 
-			MainPage = new BeerInventoryApp.MainPage();
+			MainPage = new NavigationPage(new BeerInventoryApp.MainPage());
 		}
 
 		protected override void OnStart ()
