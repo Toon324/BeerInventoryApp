@@ -1,7 +1,8 @@
 ﻿using BeerInventory.Models;
 using BeerInventoryApp.Data;
 using BeerInventoryApp.ModalPages;
-using BeerInventoryApp.Services;
+using BeerInventoryApp.RestInterfaces;
+using Refit;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -20,6 +21,8 @@ namespace BeerInventoryApp
         private String name = "Cody";
 
         private int lastResultCount = 0;
+
+        private IBeerInventoryApi InventoryApi = RestService.For<IBeerInventoryApi>(BeerInventoryApi.ApiUrl);
 
         public MainPage()
         {
@@ -74,7 +77,7 @@ namespace BeerInventoryApp
             if (string.IsNullOrEmpty(name))
                 return;
 
-            var inventory = InventoryService.GetInventory(name);
+            var inventory = InventoryApi.GetInventoryByOwner(name).Result;
 
             var sorted = inventory
                 .GroupBy(x => x.Id)

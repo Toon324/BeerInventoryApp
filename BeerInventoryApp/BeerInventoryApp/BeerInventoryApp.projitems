@@ -23,8 +23,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Models\InventoryDetails.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\InventoryEntity.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\UpcEntity.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Services\InventoryService.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Services\RestService.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)RestInterfaces\IBeerInventoryApi.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)MainPage.xaml">
@@ -35,5 +34,8 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="$(MSBuildThisFileDirectory)Services\" />
   </ItemGroup>
 </Project>

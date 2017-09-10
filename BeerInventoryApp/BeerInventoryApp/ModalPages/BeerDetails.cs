@@ -1,6 +1,7 @@
 ﻿using BeerInventory.Models;
 using BeerInventoryApp.Data;
-using BeerInventoryApp.Services;
+using BeerInventoryApp.RestInterfaces;
+using Refit;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -23,6 +24,8 @@ namespace BeerInventoryApp.ModalPages
         Button submitButton;
         ObservableCollection<InventoryDetails> Details { get; set; } = new ObservableCollection<InventoryDetails>();
         StackLayout DetailList { get; set; }
+
+        private IBeerInventoryApi InventoryApi = RestService.For<IBeerInventoryApi>(BeerInventoryApi.ApiUrl);
 
         public BeerDetails(IEnumerable<InventoryDetails> details, String owner, String beerId)
         {
@@ -68,7 +71,7 @@ namespace BeerInventoryApp.ModalPages
                 IsEnabled = false
             };
 
-            submitButton.Clicked += SubmitButton_Clicked;
+            submitButton.Clicked += SubmitButton_ClickedAsync;
 
             var amountEntry = new Entry
             {
@@ -200,7 +203,7 @@ namespace BeerInventoryApp.ModalPages
             UpdateButton();
         }
 
-        private void SubmitButton_Clicked(object sender, EventArgs e)
+        private async void SubmitButton_ClickedAsync(object sender, EventArgs e)
         {
             var amt = count;
 
@@ -211,7 +214,7 @@ namespace BeerInventoryApp.ModalPages
 
             Debug.WriteLine("Adding " + Owner + " " + location + " " + BeerId + " " + amt);
 
-            InventoryService.AddToInventory(Owner, location, BeerId, amt);
+            await InventoryApi.AddInventory(BeerId, Owner, location, amt);
 
             Reload();
         }
@@ -234,7 +237,7 @@ namespace BeerInventoryApp.ModalPages
 
         private void UpdateButton()
         {
-            if (location == "None" || location == "New Location")
+            if (location == "None" || location == "New Location" || !Details.Any(x => x.Location == location))
             {
                 submitButton.IsEnabled = false;
                 submitButton.Text = "Select a Location";
@@ -265,8 +268,8 @@ namespace BeerInventoryApp.ModalPages
 
         private void Reload()
         {
-            var inventory = InventoryService.GetInventory(Owner);
-            inventory = InventoryService.GetInventory(Owner);
+            var inventory = InventoryApi.GetInventoryByOwner(Owner).Result;
+            inventory = InventoryApi.GetInventoryByOwner(Owner).Result;
 
             var sorted = inventory
                 .GroupBy(x => x.Id)
