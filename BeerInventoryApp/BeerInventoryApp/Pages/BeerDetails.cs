@@ -9,7 +9,6 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading;
-using Windows.UI.Core;
 using Xamarin.Forms;
 
 namespace BeerInventoryApp.ModalPages
@@ -18,7 +17,6 @@ namespace BeerInventoryApp.ModalPages
     {
         int count = 1;
         string location = "None";
-        string Owner { get; set; }
         string BeerId { get; set; }
         bool shouldAdd = true;
         Button submitButton;
@@ -27,10 +25,9 @@ namespace BeerInventoryApp.ModalPages
 
         private IBeerInventoryApi InventoryApi = RestService.For<IBeerInventoryApi>(BeerInventoryApi.ApiUrl);
 
-        public BeerDetails(IEnumerable<InventoryDetails> details, String owner, String beerId)
+        public BeerDetails(IEnumerable<InventoryDetails> details, String beerId)
         {
             BeerId = beerId;
-            Owner = owner;
 
             Details = new ObservableCollection<InventoryDetails>(details);
 
@@ -212,9 +209,9 @@ namespace BeerInventoryApp.ModalPages
                 amt = amt * -1;
             }
 
-            Debug.WriteLine("Adding " + Owner + " " + location + " " + BeerId + " " + amt);
+            Debug.WriteLine("Adding " + App.Authenticator.GetCurrentUser() + " " + location + " " + BeerId + " " + amt);
 
-            await InventoryApi.AddInventory(BeerId, Owner, location, amt);
+            await InventoryApi.AddInventory(BeerId, App.Authenticator.GetCurrentUser(), location, amt);
 
             Reload();
         }
@@ -266,10 +263,9 @@ namespace BeerInventoryApp.ModalPages
             }
         }
 
-        private void Reload()
+        private async void Reload()
         {
-            var inventory = InventoryApi.GetInventoryByOwner(Owner).Result;
-            inventory = InventoryApi.GetInventoryByOwner(Owner).Result;
+            var inventory = await InventoryApi.GetInventoryByOwner(App.Authenticator.GetCurrentUser());
 
             var sorted = inventory
                 .GroupBy(x => x.Id)

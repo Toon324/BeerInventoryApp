@@ -26,6 +26,8 @@ namespace BeerInventoryApp.Droid
 		
 		public static void UpdateIdValues()
 		{
+			global::Auth0.OidcClient.Resource.String.ApplicationName = global::BeerInventoryApp.Droid.Resource.String.ApplicationName;
+			global::Auth0.OidcClient.Resource.String.Hello = global::BeerInventoryApp.Droid.Resource.String.Hello;
 			global::ModernHttpClient.Resource.String.library_name = global::BeerInventoryApp.Droid.Resource.String.library_name;
 			global::Xamarin.Forms.Platform.Android.Resource.Attribute.actionBarSize = global::BeerInventoryApp.Droid.Resource.Attribute.actionBarSize;
 			global::ZXing.Net.Mobile.Forms.Android.Resource.Layout.zxingscanneractivitylayout = global::BeerInventoryApp.Droid.Resource.Layout.zxingscanneractivitylayout;

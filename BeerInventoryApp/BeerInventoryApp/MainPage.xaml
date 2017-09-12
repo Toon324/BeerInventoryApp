@@ -6,55 +6,7 @@
              x:Class="BeerInventoryApp.MainPage">
 
     <StackLayout Margin="20">
-
-        <StackLayout Orientation="Horizontal">
-            <Label Text="Name:" VerticalOptions="Center" />
-            <Entry x:Name="Name_Entry" Placeholder="Cody" Completed="Entry_Completed"/>
-            <Button Text="Update" Clicked="Button_Clicked" />
-        </StackLayout>
-        
-
-        <SearchBar x:Name="searchBar" Placeholder="Enter your search term here" SearchButtonPressed="searchBar_SearchButtonPressed" TextChanged="searchBar_TextChanged"/>
-        
-        <ListView x:Name="listView"
-                  ItemSelected="OnListViewItemSelected"
-                  IsGroupingEnabled="True"
-                  GroupDisplayBinding="{Binding Key}"
-                  GroupShortNameBinding="{Binding Key}"
-                  HasUnevenRows="true"
-                  >
-
-            <ListView.GroupHeaderTemplate>
-                <DataTemplate>
-                    <ViewCell>
-                        <StackLayout Orientation="Horizontal" VerticalOptions="FillAndExpand">
-                            <Image Source="{Binding Key.LabelUrl}" WidthRequest="100" HeightRequest="100"/>
-                            <StackLayout Margin="20, 0, 0, 0" Orientation="Vertical" HorizontalOptions="StartAndExpand" VerticalOptions="Center">
-                                <Label Text="{Binding Key.Brewer}" FontAttributes="Bold" />
-                                <Label Text="{Binding Key.Name}"  />
-                                <Label Text="{Binding Key.ABV, StringFormat='{0:F0}%'}" />
-                            </StackLayout>
-                        </StackLayout>
-                    </ViewCell>
-                </DataTemplate>
-            </ListView.GroupHeaderTemplate>
-
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <ViewCell>
-                        <StackLayout Margin="5" Orientation="Horizontal" VerticalOptions="Center" >
-                                <Label Text="{Binding Location}" FontSize="20" />
-                                <Label Text=": " FontSize="20" />
-                                <Label Text="{Binding Count}" FontSize="20" />
-                            </StackLayout>
-                        </ViewCell>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
-
-        <Editor x:Name="editor" HeightRequest="100" IsEnabled="false" />
-
-        <Button Text="Scan" Clicked="Scan_Button_Clicked" />
+        <Button Text="Login" Clicked="Login_Button_Clicked"/>
     </StackLayout>
 
 </ContentPage>
