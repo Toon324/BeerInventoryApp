@@ -20,7 +20,7 @@ namespace BeerInventoryApp.Pages
 
         private int lastResultCount = 0;
 
-        private IBeerInventoryApi InventoryApi = RestService.For<IBeerInventoryApi>(BeerInventoryApi.ApiUrl);
+        private IBeerInventoryApi InventoryApi;
 
         public IAuthenticate Authenticate;
 
@@ -28,7 +28,9 @@ namespace BeerInventoryApp.Pages
 		{
             Authenticate = authenticator;
 
-			InitializeComponent();
+            InventoryApi = RestService.For<IBeerInventoryApi>(BeerInventoryApi.ApiUrl);
+
+            InitializeComponent();
 
             nameLabel.Text = "Logged in as: " + authenticator.GetCurrentUser();
 
@@ -54,9 +56,51 @@ namespace BeerInventoryApp.Pages
             {
                 Device.BeginInvokeOnMainThread(async () =>
                 {
-                    await Navigation.PushAsync(new AddToDb(result));
+                    ShowNextPage(result);
                 });
             };
+
+            scannerPage.OnManualResult += (result) =>
+            {
+                Device.BeginInvokeOnMainThread(async () =>
+                {
+                    ShowNextPage("", result.Split('|')[0], result.Split('|')[1]);
+                });
+            };
+        }
+
+        private async void ShowNextPage(string upc = "", string brewery = "", string beerName = "")
+        {
+            List<BeerEntity> foundBeer = new List<BeerEntity>();
+
+            if (!string.IsNullOrEmpty(upc))
+            {
+                try
+                {
+                    foundBeer = await InventoryApi.GetBeerByUPC(upc);
+                }
+                catch (Exception e) { }
+            }
+
+            if (!string.IsNullOrEmpty(brewery) && !string.IsNullOrEmpty(beerName))
+            {
+                try
+                {
+                    foundBeer = new List<BeerEntity> { await InventoryApi.GetBeerByBreweryAndName(brewery, beerName) };
+                }
+                catch (Exception e) {
+                    System.Diagnostics.Debug.WriteLine(e.Message);
+                }
+            }
+
+            if (foundBeer.Any())
+            {
+                await Navigation.PushAsync(new AddToDb("Found!", foundBeer.First().Brewer, foundBeer.First().Name));
+            }
+            else
+            {
+                await Navigation.PushAsync(new AddToDb(upc, brewery, beerName));
+            }
         }
         #endregion
 

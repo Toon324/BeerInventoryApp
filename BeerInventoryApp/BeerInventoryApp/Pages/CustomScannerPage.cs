@@ -76,7 +76,7 @@ namespace BeerInventoryApp
                 zxing.IsAnalyzing = false;
                 zxing.IsScanning = false;
                 zxing.IsEnabled = false;
-                OnManualResultEvent(upcEntry.Text);
+                OnManualResultEvent(brewerEntry.Text + "|" + beerEntry.Text);
             });
 
 

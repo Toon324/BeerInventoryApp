@@ -43,7 +43,7 @@ namespace BeerInventoryApp
 
         private void OnAuthentication(object sender, EventArgs e)
         {
-            MainPage = new HomePage(Authenticator);
+            MainPage = new NavigationPage(new HomePage(Authenticator));
         }
 
         protected override void OnSleep ()

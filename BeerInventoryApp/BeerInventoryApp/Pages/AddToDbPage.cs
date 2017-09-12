@@ -9,15 +9,15 @@ namespace BeerInventoryApp
 {
 	public class AddToDb : ContentPage
 	{
-		public AddToDb (string upc = "")
+		public AddToDb (string upc = "", string brewery = "", string beer = "")
 		{
 			Content = new StackLayout {
                 Margin = 20,
 				Children = {
-					new Label { Text = "Welcome to Xamarin Forms!" },
+					new Label { Text = "Beer not found in our system, please submit it so we can approve it. Thanks!" },
                     new Entry { Placeholder = "UPC", Text = upc },
-                    new Entry { Placeholder = "Name of Brewery"},
-                    new Entry { Placeholder = "Name of Beer"}
+                    new Entry { Placeholder = "Name of Brewery", Text = brewery},
+                    new Entry { Placeholder = "Name of Beer", Text = beer}
 				}
 			};
 		}
