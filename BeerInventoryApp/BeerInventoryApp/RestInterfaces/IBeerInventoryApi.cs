@@ -13,6 +13,9 @@ namespace BeerInventoryApp.RestInterfaces
         Task<List<BeerEntity>> GetAllBeer();
 
         [Get("/beer")]
+        Task<BeerEntity> GetBeerById(string id);
+
+        [Get("/upc")]
         Task<List<BeerEntity>> GetBeerByUPC([AliasAs("id")] string upc);
 
         [Get("/beer")]

@@ -25,6 +25,7 @@
       <DependentUpon>HomePage.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Pages\SelectBeerFromListPage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)RestInterfaces\IBeerInventoryApi.cs" />
   </ItemGroup>
   <ItemGroup>

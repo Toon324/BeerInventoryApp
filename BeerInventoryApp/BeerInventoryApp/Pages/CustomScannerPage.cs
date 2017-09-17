@@ -66,8 +66,8 @@ namespace BeerInventoryApp
             });
 
 
-            var brewerEntry = new Entry { Placeholder = "Brewery Name", HorizontalOptions = LayoutOptions.FillAndExpand };
-            var beerEntry = new Entry { Placeholder = "Beer Name", HorizontalOptions = LayoutOptions.FillAndExpand };
+            var brewerEntry = new Entry { Placeholder = "Brewery Name", HorizontalOptions = LayoutOptions.FillAndExpand, Text = "Left Hand Brewing Company" };
+            var beerEntry = new Entry { Placeholder = "Beer Name", HorizontalOptions = LayoutOptions.FillAndExpand, Text = "Milk Stout Nitro" };
 
             var manualEndButton = new Button { Text = "Enter", HorizontalOptions = LayoutOptions.End };
             manualEndButton.Clicked += (sender, e) =>

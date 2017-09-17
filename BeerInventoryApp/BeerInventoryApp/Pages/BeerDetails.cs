@@ -25,15 +25,19 @@ namespace BeerInventoryApp.ModalPages
 
         private IBeerInventoryApi InventoryApi = RestService.For<IBeerInventoryApi>(BeerInventoryApi.ApiUrl);
 
-        public BeerDetails(IEnumerable<InventoryDetails> details, String beerId)
+        public BeerDetails(String beerId)
         {
             BeerId = beerId;
 
-            Details = new ObservableCollection<InventoryDetails>(details);
+            var inventory = InventoryApi.GetInventoryByOwner(App.Authenticator.GetCurrentUser()).Result;
 
-            var beer = details.First();
+            var beerDetails = inventory.Where(x => x.Id == BeerId);
 
-            var locations = details.Select(x => x.Location).Distinct().ToList();
+            var beer = InventoryApi.GetBeerById(BeerId).Result;
+
+            Details = new ObservableCollection<InventoryDetails>(beerDetails);
+
+            var locations = beerDetails.Select(x => x.Location).Distinct().ToList();
             locations.Add("New Location");
 
             var inventoryDetails = new StackLayout()

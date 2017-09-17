@@ -13,14 +13,19 @@ using Android.Content;
 
 namespace BeerInventoryApp.Droid
 {
-	[Activity (Label = "BeerInventoryApp", Icon = "@drawable/icon", Theme="@style/MainTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
+	[Activity (Label = "BeerInventoryApp",
+        Icon = "@drawable/icon",
+        Theme="@style/MainTheme",
+        MainLauncher = true,
+        ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation,
+        LaunchMode = LaunchMode.SingleTask)]
     [IntentFilter(
         new[] { Intent.ActionView },
         Categories = new[] { Intent.CategoryDefault, Intent.CategoryBrowsable },
-        DataScheme = "com.xamarin.sample.beerinventoryapp",
+        DataScheme = "beerinventoryapp.android",
         DataHost = "cswendrowski.auth0.com",
-        DataPathPrefix = "/android/com.xamarin.sample.beerinventoryapp/callback")]
-    public class MainActivity : FormsAppCompatActivity, IAuthenticate
+        DataPathPrefix = "/android/beerinventoryapp.android/callback")]
+    public class MainActivity : FormsApplicationActivity, IAuthenticate
 	{
         private Auth0Client client;
         private AuthorizeState authorizeState;
@@ -28,39 +33,24 @@ namespace BeerInventoryApp.Droid
         private bool isAuthenticated = false;
         private string currentUser = "";
 
+        public event EventHandler Authentication;
+
         public async void Login()
         {
-            var success = false;
-            var message = string.Empty;
-            try
+            client = new Auth0Client(new Auth0ClientOptions
             {
-                client = new Auth0Client(new Auth0ClientOptions
-                {
-                    Domain = "cswendrowski.auth0.com",
-                    ClientId = "UMWesaiJJhwcssKPWNgpi5OJPUWwDiJk",
-                    Activity = this
-                });
+                Domain = "cswendrowski.auth0.com",
+                ClientId = "UMWesaiJJhwcssKPWNgpi5OJPUWwDiJk",
+                Activity = this
+            });
 
-                authorizeState = await client.PrepareLoginAsync();
+            authorizeState = await client.PrepareLoginAsync();
 
-                var uri = Android.Net.Uri.Parse(authorizeState.StartUrl);
+            var uri = Android.Net.Uri.Parse(authorizeState.StartUrl);
 
-                var intent = new Intent(Intent.ActionView, uri);
-                intent.AddFlags(ActivityFlags.NoHistory);
-                StartActivity(intent);
-
-            }
-            catch (Exception ex)
-            {
-                message = ex.Message;
-            }
-
-            // Display the success or failure message.
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.SetMessage(message);
-            builder.SetTitle("Sign-in result");
-            builder.Create().Show();
-
+            var intent = new Intent(Intent.ActionView, uri);
+            intent.AddFlags(ActivityFlags.NoHistory);
+            StartActivity(intent);
         }
 
         public bool IsAuthenticated()
@@ -84,15 +74,19 @@ namespace BeerInventoryApp.Droid
 
             var loginResult = await client.ProcessResponseAsync(intent.DataString, authorizeState);
 
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.SetMessage("ID Token: " + loginResult.IdentityToken.Substring(0, 10));
+            builder.SetTitle("Sign-in result");
+            builder.Create().Show();
+
             isAuthenticated = !loginResult.IsError;
             currentUser = loginResult.User.FindFirst("sub").Value;
+
+            OnAuthentication(EventArgs.Empty);
         }
 
         protected override void OnCreate (Bundle bundle)
 		{
-			TabLayoutResource = Resource.Layout.Tabbar;
-			ToolbarResource = Resource.Layout.Toolbar; 
-
 			base.OnCreate (bundle);
 
 			global::Xamarin.Forms.Forms.Init (this, bundle);
@@ -102,6 +96,11 @@ namespace BeerInventoryApp.Droid
 
             LoadApplication (new BeerInventoryApp.App ());
 		}
-	}
+
+        public void OnAuthentication(EventArgs e)
+        {
+            Authentication?.Invoke(this, e);
+        }
+    }
 }
 

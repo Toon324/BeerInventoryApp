@@ -42,9 +42,7 @@ namespace BeerInventoryApp.Pages
         {
             var item = ((InventoryDetails)e.SelectedItem);
 
-            var details = Items.First(x => x.Key.Id == item.Id).GetItems();
-
-            await Navigation.PushAsync(new BeerDetails(details, item.Id));
+            await Navigation.PushAsync(new BeerDetails(item.Id));
         }
 
         private async void Scan_Button_Clicked(object sender, EventArgs e)
@@ -93,13 +91,18 @@ namespace BeerInventoryApp.Pages
                 }
             }
 
-            if (foundBeer.Any())
-            {
-                await Navigation.PushAsync(new AddToDb("Found!", foundBeer.First().Brewer, foundBeer.First().Name));
-            }
-            else
+            if (!foundBeer.Any())
             {
                 await Navigation.PushAsync(new AddToDb(upc, brewery, beerName));
+            }
+            else if (foundBeer.Count > 1)
+            {
+                await Navigation.PushAsync(new SelectBeerFromListPage(foundBeer));
+            }
+            else // Only one found
+            {
+                var beerId = foundBeer.First().Id;
+                await Navigation.PushAsync(new BeerDetails(beerId));
             }
         }
         #endregion
