@@ -47,7 +47,11 @@
 
             <Editor x:Name="editor" HeightRequest="100" IsEnabled="false" />
 
-            <Button Text="Scan" Clicked="Scan_Button_Clicked" />
+            <StackLayout Orientation="Horizontal">
+                <Button Text="Search" Clicked="Search_Button_Clicked" />
+                <Button Text="Scan" Clicked="Scan_Button_Clicked" />
+            </StackLayout>
+            
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

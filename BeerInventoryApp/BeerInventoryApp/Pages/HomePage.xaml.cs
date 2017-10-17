@@ -52,7 +52,7 @@ namespace BeerInventoryApp.Pages
 
             scannerPage.OnUpcResult += (result) =>
             {
-                Device.BeginInvokeOnMainThread(async () =>
+                Device.BeginInvokeOnMainThread(() =>
                 {
                     ShowNextPage(result);
                 });
@@ -60,11 +60,16 @@ namespace BeerInventoryApp.Pages
 
             scannerPage.OnManualResult += (result) =>
             {
-                Device.BeginInvokeOnMainThread(async () =>
+                Device.BeginInvokeOnMainThread(() =>
                 {
                     ShowNextPage("", result.Split('|')[0], result.Split('|')[1]);
                 });
             };
+        }
+
+        private async void Search_Button_Clicked(object sender, EventArgs e)
+        {
+            await Navigation.PushAsync(new SearchPage());
         }
 
         private async void ShowNextPage(string upc = "", string brewery = "", string beerName = "")

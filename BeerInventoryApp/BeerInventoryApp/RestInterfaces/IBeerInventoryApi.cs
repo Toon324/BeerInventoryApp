@@ -36,7 +36,7 @@ namespace BeerInventoryApp.RestInterfaces
 
     public static class BeerInventoryApi
     {
-        public static string ApiUrl = "http://beerinventory20170506104048.azurewebsites.net/api";
+        public const string ApiUrl = "http://beerinventory20170506104048.azurewebsites.net/api";
     }
 }
 

@@ -10,6 +10,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)App.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\SearchResultsEntity.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\SuggestionResultsEntity.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Pages\BeerDetails.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Pages\CustomScannerPage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Pages\AddToDbPage.cs" />
@@ -25,7 +27,9 @@
       <DependentUpon>HomePage.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Pages\SearchPage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Pages\SelectBeerFromListPage.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)RestInterfaces\IAzureSearchApi.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)RestInterfaces\IBeerInventoryApi.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -39,8 +43,5 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="$(MSBuildThisFileDirectory)Services\" />
   </ItemGroup>
 </Project>
